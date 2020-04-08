@@ -1,17 +1,44 @@
 import React from 'react';
+import classnames from 'classnames'
 import Checkbox from './Checkbox';
 import EditableName from './EditableName';
 import styles from './folderTreeCSS.css';
 
-const FolderComponent = ({ level, checked, handleCheck, filename, toggleFolder, open, setMyName, selectMe, selected }) => (
-  <div className={styles.folder} style={{marginLeft: getInden(level)}}>
-    <Checkbox status={checked} handleCheck={handleCheck} />
+const FolderComponent = ({
+    level,
+    checked,
+    handleCheck,
+    filename,
+    toggleFolder,
+    open,
+    setMyName,
+    selectMe,
+    selected,
+    folderTextClassName,
+    folderTextSelectedClassName,
+    showCheckbox,
+    isEditable
+  }) => (
+  <div className={classnames(
+      styles.folder,
+      folderTextClassName
+  )} style={{marginLeft: getInden(level)}}>
+      {
+        showCheckbox ? <Checkbox status={checked} handleCheck={handleCheck} /> : null
+      }
+    <a onClick={toggleFolder}><i className={open ? [styles.arrowDown, styles.carat].join(' ')  : [styles.arrowRight, styles.carat].join(' ') } /> </a>
 
-    <a onClick={toggleFolder}><i className={open? [styles.arrowDown, styles.carat].join(' ')  : [styles.arrowRight, styles.carat].join(' ') } /> </a>
-
-    <span className={selected ? [styles.folderText, styles.selected].join(' ') : styles.folderText} onClick={selectMe}>
+    <span className={
+        selected ? classnames(
+          styles.folderText,
+          styles.selected,
+          folderTextSelectedClassName
+        ) : styles.folderText
+        }onClick={selectMe}>
       <i className={open? styles.foldeOpenIcon : styles.folderIcon} />   
-      <EditableName filename={filename} setMyName={setMyName} selected={selected} />
+      {
+        <EditableName isEditable={isEditable} filename={filename} setMyName={setMyName} selected={selected} />
+      }
     </span>
 
   </div>
@@ -24,7 +51,7 @@ FolderComponent.propTypes = {
   checked: React.PropTypes.number.isRequired,
   filename: React.PropTypes.string.isRequired,
   selected: React.PropTypes.number.isRequired,
-
+  showCheckbox: React.PropTypes.bool.isRequired,
   selectMe: React.PropTypes.func.isRequired,
   setMyName: React.PropTypes.func.isRequired,
   handleCheck: React.PropTypes.func.isRequired,

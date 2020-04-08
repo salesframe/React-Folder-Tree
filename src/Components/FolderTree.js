@@ -4,6 +4,7 @@ import FolderComponent from './FolderComponent';
 import FileComponent from './FileComponent';
 import FolderToolbar from './FolderToolbar';
 import FilePane from './FilePane';
+import classnames from 'classnames'
 import styles from './folderTreeCSS.css'
 
 class FolderTree extends Component {
@@ -13,12 +14,24 @@ class FolderTree extends Component {
     folderComponent: React.PropTypes.func,
     onChange: React.PropTypes.func,
     showToolbar: React.PropTypes.bool,
+    rootClassName: React.PropTypes.string,
+    folderTextClassName: React.PropTypes.string,
+    folderTextSelectedClassName: React.PropTypes.string,
+    showCheckbox: React.PropTypes.bool,
+    listClassName: React.PropTypes.string,
+    isEditable: React.PropTypes.bool,
   };
 
   static defaultProps = {
     folderComponent: FolderComponent,
     fileComponent: FileComponent,
     showToolbar: false,
+    rootClassName: '',
+    folderTextClassName: '',
+    folderTextSelectedClassName: '',
+    showCheckbox: false,
+    listClassName: '',
+    isEditable: false,
   };
 
   constructor(props) {
@@ -203,7 +216,10 @@ class FolderTree extends Component {
 
         {this.state.addingNewFile && <FilePane addNewFile={filename => {this.addNewFileInSelectedObj(filename)}} toggleAddingNewFile={this.toggleAddingNewFile} />}
 
-        <div className={styles.folderTree}>
+        <div className={classnames(
+          styles.folderTree,
+          this.props.rootClassName
+        )}>
           <TreeNode
             path={[]}
             level={0}
@@ -221,6 +237,11 @@ class FolderTree extends Component {
             handleCheck={this.handleCheck}
             setPath={ path => { this.setSelectedPath(path) } }
             setName={ (path, name) => { this.setChildName(path, name); } }
+            folderTextClassName={this.props.folderTextClassName}
+            folderTextSelectedClassName={this.props.folderTextSelectedClassName}
+            showCheckbox={this.props.showCheckbox}
+            listClassName={this.props.listClassName}
+            isEditable={this.props.isEditable}
           />
         </div>
 
